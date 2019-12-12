@@ -3,6 +3,9 @@ package com.ryan.londonusers.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 
+/**
+ * Class defining User object both being consumed and returning.
+ */
 @Value
 public class User {
 
