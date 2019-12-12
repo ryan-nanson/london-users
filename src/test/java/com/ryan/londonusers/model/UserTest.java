@@ -3,12 +3,12 @@ package com.ryan.londonusers.model;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-class UserTest {
+public class UserTest {
 
   @Test
-  void testConstructor() {
+  public void testConstructor() {
     User user = new User(
         1,
         "John",
