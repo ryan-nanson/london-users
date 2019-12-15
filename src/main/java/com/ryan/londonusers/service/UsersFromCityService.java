@@ -19,7 +19,7 @@ public class UsersFromCityService {
   /**
    * Constant for the base path of the backend request url.
    */
-  final private String BACKEND_URL = "http://bpdts-test-app.herokuapp.com/city/";
+  final private String BACKEND_URL = "http://bpdts-test-app.herokuapp.com/";
 
   /**
    * Define restTemplate.
@@ -43,7 +43,7 @@ public class UsersFromCityService {
    */
   public List<User> getUsersFromCity(final String city) {
 
-    final String requestUrl = BACKEND_URL + city + "/users";
+    final String requestUrl = BACKEND_URL + "city/" + city + "/users";
 
     final ResponseEntity<User[]> responseEntity =
         restTemplate.exchange(requestUrl, HttpMethod.GET, null, User[].class);
