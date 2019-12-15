@@ -71,7 +71,7 @@ public class UsersWithinRadiusServiceTest {
         "liz_windsor@bucks.com",
         "0.0.0.0",
         51.501401,
-        0.142159);
+        -0.142159);
 
     List<User> expectedUsers = new ArrayList<>();
     expectedUsers.add(theQueen);
@@ -92,5 +92,36 @@ public class UsersWithinRadiusServiceTest {
 
     assertThat("If London long lat is given and the queen is the only user, she should be returned",
         actualUsers, is(expectedUsers));
+  }
+
+  @Test
+  public void givenNewcastleUserReturnedAndLondonLongLatGiven_GetUsersWithinRadius_ReturnsEmptyList() {
+
+    // User with long, lat of Newcastle
+    User jordyUser = new User(
+        1,
+        "Declan",
+        "Donnelly",
+        "dec@antanddec.com",
+        "0.0.0.0",
+        54.978250,
+        -1.617781);
+
+    User[] users = new User[1];
+    users[0] = jordyUser;
+
+    ResponseEntity<User[]> responseEntity = new ResponseEntity<>(users, HttpStatus.OK);
+
+    when(restTemplate.exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class))
+        .thenReturn(responseEntity);
+
+    // Call on London Long Lat with radius of 50 miles (in metres)
+    List<User> actualUsers = usersWithinRadiusService.getUsersWithinRadius(51.507222, -0.1275, 80467.2);
+
+    verify(restTemplate, times(1))
+        .exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class);
+
+    assertThat("If London long lat is given and a newcastle user is the only user, an empty list should be returned",
+        actualUsers, is(new ArrayList()));
   }
 }
