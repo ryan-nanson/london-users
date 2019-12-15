@@ -29,6 +29,25 @@ public class UsersWithinRadiusServiceTest {
   }
 
   @Test
+  public void givenNoUsers_GetUsersWithinRadius_ReturnsEmptyList() {
+
+    User[] users = new User[0];
+
+    ResponseEntity<User[]> responseEntity = new ResponseEntity<>(users, HttpStatus.OK);
+
+    when(restTemplate.exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class))
+        .thenReturn(responseEntity);
+
+    List<User> actualUsers = usersWithinRadiusService.getUsersWithinRadius(123.456, 654.321, 80467.2);
+
+    verify(restTemplate, times(1))
+        .exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class);
+
+    assertThat("If London long lat is given and the queen is the only user, she should be returned",
+        actualUsers, is(new ArrayList()));
+  }
+
+  @Test
   public void givenUserAtSameLongLatAsPoint_GetUsersWithinRadius_ReturnsTheUser() {
 
     User userWithinRadius = new User(
