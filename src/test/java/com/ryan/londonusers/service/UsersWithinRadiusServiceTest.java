@@ -118,7 +118,7 @@ public class UsersWithinRadiusServiceTest {
 
     // User with long, lat of Newcastle
     User jordyUser = new User(
-        1,
+        2,
         "Declan",
         "Donnelly",
         "dec@antanddec.com",
@@ -159,7 +159,7 @@ public class UsersWithinRadiusServiceTest {
 
     // User with long, lat of Newcastle
     User jordyUser = new User(
-        1,
+        2,
         "Declan",
         "Donnelly",
         "dec@antanddec.com",

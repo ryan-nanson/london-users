@@ -23,21 +23,6 @@ public class UsersWithinRadiusService {
   final private String BACKEND_URL = "http://bpdts-test-app.herokuapp.com/";
 
   /**
-   * Radius in meters (50 miles in metres).
-   */
-  final private double RADIUS = 80467.2;
-
-  /**
-   * Latitude of London.
-   */
-  final private double LONDON_LATITUDE = 51.507222;
-
-  /**
-   * Longitude of London.
-   */
-  final private double LONDON_LONGITUDE = -0.1275;
-
-  /**
    * Define restTemplate.
    */
   private RestTemplate restTemplate;

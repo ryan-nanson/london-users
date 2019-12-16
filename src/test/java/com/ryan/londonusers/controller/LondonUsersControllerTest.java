@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.ryan.londonusers.model.User;
-import com.ryan.londonusers.service.UsersFromCityService;
+import com.ryan.londonusers.service.UsersInOrAroundLondonService;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -15,23 +15,23 @@ import org.springframework.http.ResponseEntity;
 
 public class LondonUsersControllerTest {
 
-  private UsersFromCityService usersFromCityService;
+  private UsersInOrAroundLondonService usersInOrAroundLondonService;
   private LondonUsersController londonUsersController;
 
   @Before
   public void setUp() {
-    usersFromCityService = mock(UsersFromCityService.class);
-    londonUsersController = new LondonUsersController(usersFromCityService);
+    usersInOrAroundLondonService = mock(UsersInOrAroundLondonService.class);
+    londonUsersController = new LondonUsersController(usersInOrAroundLondonService);
   }
 
   @Test
   public void givenNoUsers_GetLondonUsers_ReturnsEmptyList() {
 
-    when(usersFromCityService.getUsersFromCity("London")).thenReturn(new ArrayList<>());
+    when(usersInOrAroundLondonService.getUsersInOrAroundLondonService()).thenReturn(new ArrayList<>());
 
     ResponseEntity<List<User>> responseEntity = londonUsersController.getLondonUsers();
 
-    assertThat("Controller returns empty list", responseEntity.getBody(), is(new ArrayList()));
+    assertThat("Controller returns empty list when no users returned", responseEntity.getBody(), is(new ArrayList()));
   }
 
   @Test
@@ -49,11 +49,11 @@ public class LondonUsersControllerTest {
     List<User> users = new ArrayList<>();
     users.add(userJohn);
 
-    when(usersFromCityService.getUsersFromCity("London")).thenReturn(users);
+    when(usersInOrAroundLondonService.getUsersInOrAroundLondonService()).thenReturn(users);
 
     ResponseEntity<List<User>> responseEntity = londonUsersController.getLondonUsers();
 
-    assertThat("Controller returns empty list", responseEntity.getBody(), is(users));
+    assertThat("Controller returns expected list", responseEntity.getBody(), is(users));
   }
 
   @Test
@@ -73,11 +73,10 @@ public class LondonUsersControllerTest {
     users.add(userJohn);
     users.add(userJohn);
 
-    when(usersFromCityService.getUsersFromCity("London")).thenReturn(users);
+    when(usersInOrAroundLondonService.getUsersInOrAroundLondonService()).thenReturn(users);
 
     ResponseEntity<List<User>> responseEntity = londonUsersController.getLondonUsers();
 
-    assertThat("Returned list has multiple users in it", responseEntity.getBody().size(), is(3));
-    assertThat("Controller returns empty list", responseEntity.getBody(), is(users));
+    assertThat("Controller returns expected list", responseEntity.getBody(), is(users));
   }
 }
