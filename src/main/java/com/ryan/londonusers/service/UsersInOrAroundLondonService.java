@@ -48,7 +48,8 @@ public class UsersInOrAroundLondonService {
    * @param usersWithinRadiusService - service to get users around london.
    */
   @Autowired
-  public UsersInOrAroundLondonService(UsersFromCityService usersFromCityService, UsersWithinRadiusService usersWithinRadiusService) {
+  public UsersInOrAroundLondonService(UsersFromCityService usersFromCityService,
+      UsersWithinRadiusService usersWithinRadiusService) {
     this.usersFromCityService = usersFromCityService;
     this.usersWithinRadiusService = usersWithinRadiusService;
   }
@@ -66,7 +67,8 @@ public class UsersInOrAroundLondonService {
         usersWithinRadiusService.getUsersWithinRadius(LONDON_LATITUDE, LONDON_LONGITUDE, RADIUS);
 
     return Stream.of(londonUsers, usersWithinFiftyMilesOfLondon)
-    .flatMap(Collection::stream)
-    .collect(Collectors.toList());
+        .flatMap(Collection::stream)
+        .distinct()
+        .collect(Collectors.toList());
   }
 }

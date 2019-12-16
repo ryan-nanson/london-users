@@ -42,7 +42,7 @@ public class LondonUsersIT {
 
     RestAssuredMockMvc
         .when().get("/v1/london-users")
-        .then().expect(jsonPath("$", hasSize(6)))
+        .then().expect(jsonPath("$", hasSize(9)))
         .and().statusCode(200);
   }
 }
