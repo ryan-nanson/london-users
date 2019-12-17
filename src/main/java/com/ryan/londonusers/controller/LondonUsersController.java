@@ -1,7 +1,7 @@
 package com.ryan.londonusers.controller;
 
 import com.ryan.londonusers.model.User;
-import com.ryan.londonusers.service.UsersFromCityService;
+import com.ryan.londonusers.service.UsersInOrAroundLondonService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,18 +14,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LondonUsersController {
 
-  private final UsersFromCityService usersFromCityService;
+  /**
+   * UsersInOrAroundCityService init.
+   */
+  private final UsersInOrAroundLondonService usersInOrAroundLondonService;
 
+  /**
+   * Constructor for controller autowiring service.
+   *
+   * @param usersInOrAroundLondonService - service to get users in our around city.
+   */
   @Autowired
-  public LondonUsersController(UsersFromCityService usersFromCityService) {
-    this.usersFromCityService = usersFromCityService;
+  public LondonUsersController(UsersInOrAroundLondonService usersInOrAroundLondonService) {
+    this.usersInOrAroundLondonService = usersInOrAroundLondonService;
   }
 
   @GetMapping(value = "/v1/london-users", produces = {"application/json"})
   public ResponseEntity<List<User>> getLondonUsers() {
 
-    List<User> users = usersFromCityService.getUsersFromCity("London");
+    List<User> londonUsers = usersInOrAroundLondonService.getUsersInOrAroundLondonService();
 
-    return ResponseEntity.ok().body(users);
+    return ResponseEntity.ok().body(londonUsers);
   }
 }
