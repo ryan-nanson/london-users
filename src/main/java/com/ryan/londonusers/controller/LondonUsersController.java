@@ -2,7 +2,10 @@ package com.ryan.londonusers.controller;
 
 import com.ryan.londonusers.model.User;
 import com.ryan.londonusers.service.UsersInOrAroundLondonService;
+import com.ryan.londonusers.service.UsersWithinRadiusService;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class LondonUsersController {
+
+  /**
+   * Logger for this service.
+   */
+  private static final Logger LOGGER = LoggerFactory.getLogger(UsersWithinRadiusService.class);
 
   /**
    * UsersInOrAroundCityService init.
@@ -31,6 +39,8 @@ public class LondonUsersController {
 
   @GetMapping(value = "/v1/london-users", produces = {"application/json"})
   public ResponseEntity<List<User>> getLondonUsers() {
+
+    LOGGER.info("Received request, call service to get corresponding users");
 
     List<User> londonUsers = usersInOrAroundLondonService.getUsersInOrAroundLondonService();
 

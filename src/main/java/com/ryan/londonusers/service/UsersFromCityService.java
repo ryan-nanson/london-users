@@ -3,6 +3,8 @@ package com.ryan.londonusers.service;
 import com.ryan.londonusers.model.User;
 import java.util.Arrays;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,11 @@ public class UsersFromCityService {
    * Constant for the base path of the backend request url.
    */
   final private String BACKEND_URL = "http://bpdts-test-app.herokuapp.com/";
+
+  /**
+   * Logger for this service.
+   */
+  private static final Logger LOGGER = LoggerFactory.getLogger(UsersWithinRadiusService.class);
 
   /**
    * Define restTemplate.
@@ -45,6 +52,7 @@ public class UsersFromCityService {
 
     final String requestUrl = BACKEND_URL + "city/" + city + "/users";
 
+    LOGGER.info("Request all users listed as from London.");
     final ResponseEntity<User[]> responseEntity =
         restTemplate.exchange(requestUrl, HttpMethod.GET, null, User[].class);
 
