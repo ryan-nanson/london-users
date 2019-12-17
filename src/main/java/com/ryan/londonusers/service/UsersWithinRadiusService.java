@@ -1,6 +1,7 @@
 package com.ryan.londonusers.service;
 
 import com.ryan.londonusers.model.User;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,11 +60,12 @@ public class UsersWithinRadiusService {
     final ResponseEntity<User[]> responseEntity =
         restTemplate.exchange(requestUrl, HttpMethod.GET, null, User[].class);
 
+    User[] users = responseEntity.getBody();
 
-    List<User> users = Arrays.asList(responseEntity.getBody());
+    List<User> usersWithinRadius = users != null ? Arrays.asList(users) : new ArrayList<>();
 
     LOGGER.info("Filtering results to only users within 50 miles of London.");
-    return users.stream()
+    return usersWithinRadius.stream()
         .filter(user -> SloppyMath.haversinMeters(latitudeOfPoint, longitudeOfPoint, user.getLatitude(), user.getLongitude())
             <= radius)
         .collect(Collectors.toList());
