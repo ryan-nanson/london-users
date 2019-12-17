@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,11 @@ public class UsersInOrAroundLondonService {
    * Constant for the longitude of London.
    */
   final private double LONDON_LONGITUDE = -0.1275;
+
+  /**
+   * Logger for this service.
+   */
+  private static final Logger LOGGER = LoggerFactory.getLogger(UsersWithinRadiusService.class);
 
   /**
    * Users from city service init.
@@ -66,6 +73,8 @@ public class UsersInOrAroundLondonService {
     List<User> usersWithinFiftyMilesOfLondon =
         usersWithinRadiusService.getUsersWithinRadius(LONDON_LATITUDE, LONDON_LONGITUDE, RADIUS);
 
+
+    LOGGER.info("Combine results from both queries.");
     return Stream.of(londonUsers, usersWithinFiftyMilesOfLondon)
         .flatMap(Collection::stream)
         .distinct()
