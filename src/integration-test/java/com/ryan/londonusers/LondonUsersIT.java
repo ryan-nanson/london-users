@@ -40,7 +40,7 @@ public class LondonUsersIT {
   }
 
   @Test
-  public void givenBackendWithAllUsersMocked_FullService_ReturnsAllUsersFromLondonAsBackendDoes() {
+  public void givenBackendWithAllUsersMocked_FullService_ReturnsAllUsersFromLondonAndAroundAsServiceDoes() {
 
     RestAssuredMockMvc
         .when().get("/v1/london-users")
