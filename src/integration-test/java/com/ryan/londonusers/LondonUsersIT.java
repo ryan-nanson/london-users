@@ -1,5 +1,9 @@
 package com.ryan.londonusers;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,9 +42,49 @@ public class LondonUsersIT {
     MockMvc mockMvc = MockMvcBuilders.standaloneSetup(londonUsersController).build();
     RestAssuredMockMvc.mockMvc(mockMvc);
   }
+  @Test
+  public void givenBackendReturnsEmptyList_FullService_ReturnsEmptyList() {
+
+    stubFor(get(urlEqualTo("/city/London/users"))
+        .willReturn(
+            aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("[]")
+        ));
+
+    stubFor(get(urlEqualTo("/users"))
+        .willReturn(
+            aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("[]")
+        ));
+
+    RestAssuredMockMvc
+        .when().get("/v1/london-users")
+        .then().expect(jsonPath("$", hasSize(0)))
+        .and().statusCode(200);
+  }
 
   @Test
   public void givenBackendWithAllUsersMocked_FullService_ReturnsAllUsersFromLondonAndAroundAsServiceDoes() {
+
+    stubFor(get(urlEqualTo("/city/London/users"))
+        .willReturn(
+            aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBodyFile("londonUsers.response.json")
+        ));
+
+    stubFor(get(urlEqualTo("/users"))
+        .willReturn(
+            aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBodyFile("allUsers.response.json")
+        ));
 
     RestAssuredMockMvc
         .when().get("/v1/london-users")
