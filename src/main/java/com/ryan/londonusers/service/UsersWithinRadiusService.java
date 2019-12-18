@@ -9,6 +9,7 @@ import org.apache.lucene.util.SloppyMath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,14 +22,14 @@ import org.springframework.web.client.RestTemplate;
 public class UsersWithinRadiusService {
 
   /**
-   * Constant for the base path of the backend request url.
-   */
-  final private String BACKEND_URL = "http://bpdts-test-app.herokuapp.com/";
-
-  /**
    * Logger for this service.
    */
   private static final Logger LOGGER = LoggerFactory.getLogger(UsersWithinRadiusService.class);
+
+  /**
+   * Base url for backend call.
+   */
+  private final String backendUrl;
 
   /**
    * Define restTemplate.
@@ -40,8 +41,9 @@ public class UsersWithinRadiusService {
    * @param restTemplate used to make the backend request.
    */
   @Autowired
-  public UsersWithinRadiusService(RestTemplate restTemplate) {
+  public UsersWithinRadiusService(RestTemplate restTemplate, final @Value("${backend_service_url}") String url) {
     this.restTemplate = restTemplate;
+    this.backendUrl = url;
   }
 
   /**
@@ -54,7 +56,7 @@ public class UsersWithinRadiusService {
    */
   public List<User> getUsersWithinRadius(final double latitudeOfPoint, final double longitudeOfPoint, final double radius) {
 
-    final String requestUrl = BACKEND_URL + "users";
+    final String requestUrl = backendUrl + "users";
 
     LOGGER.info("Making request to get all users.");
     final ResponseEntity<User[]> responseEntity =

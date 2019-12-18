@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.junit.Assert.assertNull;
 
 import com.ryan.londonusers.model.User;
 import java.util.ArrayList;
@@ -20,11 +19,15 @@ public class UsersFromCityServiceTest {
 
   private RestTemplate restTemplate;
   private UsersFromCityService usersFromCityService;
+  private String backendUrl;
 
   @Before
   public void setUp() {
     restTemplate = mock(RestTemplate .class);
-    usersFromCityService = new UsersFromCityService(restTemplate);
+    String url = "http://bpdts-test-app.herokuapp.com/";
+    usersFromCityService = new UsersFromCityService(restTemplate, url);
+
+    backendUrl = url + "city/London/users";
   }
 
   @Test
@@ -47,7 +50,7 @@ public class UsersFromCityServiceTest {
 
     ResponseEntity<User[]> responseEntity = new ResponseEntity<>(users, HttpStatus.OK);
 
-    when(restTemplate.exchange("http://bpdts-test-app.herokuapp.com/city/London/users", HttpMethod.GET, null, User[].class))
+    when(restTemplate.exchange(backendUrl, HttpMethod.GET, null, User[].class))
         .thenReturn(responseEntity);
 
     List<User> actualUsers = usersFromCityService.getUsersFromCity("London");
@@ -79,7 +82,7 @@ public class UsersFromCityServiceTest {
 
     ResponseEntity<User[]> responseEntity = new ResponseEntity<>(users, HttpStatus.OK);
 
-    when(restTemplate.exchange("http://bpdts-test-app.herokuapp.com/city/London/users", HttpMethod.GET, null, User[].class))
+    when(restTemplate.exchange(backendUrl, HttpMethod.GET, null, User[].class))
         .thenReturn(responseEntity);
 
     List<User> actualUsers = usersFromCityService.getUsersFromCity("London");
@@ -94,11 +97,11 @@ public class UsersFromCityServiceTest {
 
     ResponseEntity<User[]> responseEntity = new ResponseEntity<>(new User[0], HttpStatus.BAD_REQUEST);
 
-    when(restTemplate.exchange("http://bpdts-test-app.herokuapp.com/city/London/users", HttpMethod.GET, null, User[].class))
+    when(restTemplate.exchange(backendUrl, HttpMethod.GET, null, User[].class))
         .thenReturn(responseEntity);
 
     List<User> actualUsers = usersFromCityService.getUsersFromCity("London");
 
-    assertNull(actualUsers);
+    assertThat("Service returns empty list.", actualUsers, is(new ArrayList<>()));
   }
 }

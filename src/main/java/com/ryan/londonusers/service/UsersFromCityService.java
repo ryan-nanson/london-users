@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,9 @@ import org.springframework.web.client.RestTemplate;
 public class UsersFromCityService {
 
   /**
-   * Constant for the base path of the backend request url.
+   * Base url for backend call.
    */
-  final private String BACKEND_URL = "http://bpdts-test-app.herokuapp.com/";
+  private final String backendUrl;
 
   /**
    * Logger for this service.
@@ -38,8 +39,9 @@ public class UsersFromCityService {
    * @param restTemplate used to make the backend request.
    */
   @Autowired
-  public UsersFromCityService(RestTemplate restTemplate) {
+  public UsersFromCityService(RestTemplate restTemplate, final @Value("${backend_service_url}") String url) {
     this.restTemplate = restTemplate;
+    this.backendUrl = url;
   }
 
   /**
@@ -50,7 +52,7 @@ public class UsersFromCityService {
    */
   public List<User> getUsersFromCity(final String city) {
 
-    final String requestUrl = BACKEND_URL + "city/" + city + "/users";
+    final String requestUrl = backendUrl + "city/" + city + "/users";
 
     LOGGER.info("Request all users listed as from London.");
     final ResponseEntity<User[]> responseEntity =
