@@ -21,11 +21,15 @@ public class UsersWithinRadiusServiceTest {
 
   private RestTemplate restTemplate;
   private UsersWithinRadiusService usersWithinRadiusService;
+  private String backendUrl;
 
   @Before
   public void setUp() {
     restTemplate = mock(RestTemplate.class);
-    usersWithinRadiusService = new UsersWithinRadiusService(restTemplate);
+    String url = "http://bpdts-test-app.herokuapp.com/";
+    usersWithinRadiusService = new UsersWithinRadiusService(restTemplate, url);
+
+    backendUrl = url + "users";
   }
 
   @Test
@@ -35,13 +39,13 @@ public class UsersWithinRadiusServiceTest {
 
     ResponseEntity<User[]> responseEntity = new ResponseEntity<>(users, HttpStatus.OK);
 
-    when(restTemplate.exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class))
+    when(restTemplate.exchange(backendUrl, HttpMethod.GET, null, User[].class))
         .thenReturn(responseEntity);
 
     List<User> actualUsers = usersWithinRadiusService.getUsersWithinRadius(123.456, 654.321, 80467.2);
 
     verify(restTemplate, times(1))
-        .exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class);
+        .exchange(backendUrl, HttpMethod.GET, null, User[].class);
 
     assertThat("If London long lat is given and the queen is the only user, she should be returned",
         actualUsers, is(new ArrayList()));
@@ -67,13 +71,13 @@ public class UsersWithinRadiusServiceTest {
 
     ResponseEntity<User[]> responseEntity = new ResponseEntity<>(users, HttpStatus.OK);
 
-    when(restTemplate.exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class))
+    when(restTemplate.exchange(backendUrl, HttpMethod.GET, null, User[].class))
         .thenReturn(responseEntity);
 
     List<User> actualUsers = usersWithinRadiusService.getUsersWithinRadius(123.456, 654.321, 1.0);
 
     verify(restTemplate, times(1))
-        .exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class);
+        .exchange(backendUrl, HttpMethod.GET, null, User[].class);
 
     assertThat("If distance between user and point is less than radius, user is returned",
         actualUsers, is(expectedUsers));
@@ -100,14 +104,14 @@ public class UsersWithinRadiusServiceTest {
 
     ResponseEntity<User[]> responseEntity = new ResponseEntity<>(users, HttpStatus.OK);
 
-    when(restTemplate.exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class))
+    when(restTemplate.exchange(backendUrl, HttpMethod.GET, null, User[].class))
         .thenReturn(responseEntity);
 
     // Call on London Long Lat with radius of 50 miles (in metres)
     List<User> actualUsers = usersWithinRadiusService.getUsersWithinRadius(51.507222, -0.1275, 80467.2);
 
     verify(restTemplate, times(1))
-        .exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class);
+        .exchange(backendUrl, HttpMethod.GET, null, User[].class);
 
     assertThat("If London long lat is given and the queen is the only user, she should be returned",
         actualUsers, is(expectedUsers));
@@ -131,14 +135,14 @@ public class UsersWithinRadiusServiceTest {
 
     ResponseEntity<User[]> responseEntity = new ResponseEntity<>(users, HttpStatus.OK);
 
-    when(restTemplate.exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class))
+    when(restTemplate.exchange(backendUrl, HttpMethod.GET, null, User[].class))
         .thenReturn(responseEntity);
 
     // Call on London Long Lat with radius of 50 miles (in metres)
     List<User> actualUsers = usersWithinRadiusService.getUsersWithinRadius(51.507222, -0.1275, 80467.2);
 
     verify(restTemplate, times(1))
-        .exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class);
+        .exchange(backendUrl, HttpMethod.GET, null, User[].class);
 
     assertThat("If London long lat is given and a newcastle user is the only user, an empty list should be returned",
         actualUsers, is(new ArrayList()));
@@ -176,14 +180,14 @@ public class UsersWithinRadiusServiceTest {
 
     ResponseEntity<User[]> responseEntity = new ResponseEntity<>(users, HttpStatus.OK);
 
-    when(restTemplate.exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class))
+    when(restTemplate.exchange(backendUrl, HttpMethod.GET, null, User[].class))
         .thenReturn(responseEntity);
 
     // Call on London Long Lat with radius of 50 miles (in metres)
     List<User> actualUsers = usersWithinRadiusService.getUsersWithinRadius(51.507222, -0.1275, 80467.2);
 
     verify(restTemplate, times(1))
-        .exchange("http://bpdts-test-app.herokuapp.com/users", HttpMethod.GET, null, User[].class);
+        .exchange(backendUrl, HttpMethod.GET, null, User[].class);
 
     assertThat("If London long lat is given and the queen is the only user, she should be returned",
         actualUsers, is(expectedUsers));
